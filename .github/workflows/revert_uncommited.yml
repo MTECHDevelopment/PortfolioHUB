@@ -1,0 +1,31 @@
+name: Revert Uncommitted Changes
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Permite execução manual
+
+jobs:
+  revert-changes:
+    runs-on: windows-latest # Define o ambiente
+
+    steps:
+      # Fazer checkout do código
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Mostrar mudanças atuais
+      - name: Show current changes
+        run: |
+          echo "Arquivos modificados:"
+          git status
+          echo "Detalhes das mudanças:"
+          git diff
+
+      # Reverter alterações não commitadas
+      - name: Revert changes
+        run: |
+          echo "Revertendo todas as alterações..."
+          git restore --source=HEAD --staged --worktree .
+          echo "Alterações revertidas com sucesso."
